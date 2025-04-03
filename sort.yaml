@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: midbrain-rtsort
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      containers:
+      - name: sttc-plots
+        image: aidanmorson/rt-sort:v1
+        imagePullPolicy: Always
+        resources:
+
+          # GPU Run
+          requests:
+            cpu: "15"
+            memory: "24Gi"
+            ephemeral-storage: "250Gi"
+            nvidia.com/rtxa6000: "1"
+          limits:
+            cpu: "15"
+            memory: "24Gi"
+            ephemeral-storage: "250Gi"
+            nvidia.com/rtxa6000: "1"
+
+        command: ["/usr/bin/time", "-v", "python", "sorter.py"]
+        args:
+          - input s3 path
+          - output s3 path
+  
+
+        env:
+          - name: "PYTHONUNBUFFERED"
+            value: "true"
+          - name: "PYTHONPATH"
+            value: "/app"
+          # Ceph (internal)
+          - name: "ENDPOINT_URL"
+            value: "https://s3.braingeneers.gi.ucsc.edu"  # ceph internal
+          - name: "S3_ENDPOINT"
+            value: "s3.braingeneers.gi.ucsc.edu" # ceph internal
+
+        volumeMounts:
+
+          # Ceph credentials
+          - name: "prp-s3-credentials"
+            mountPath: "/root/.aws/credentials"
+            subPath: "credentials"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+
+
+      restartPolicy: Never
+      volumes:
+        # Secrets file for nautilus s3 credentials .aws/credentials and .s3cfg
+        - name: prp-s3-credentials
+          secret:
+            secretName: prp-s3-credentials
+        - name: ephemeral
+          emptyDir: {}
