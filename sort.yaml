@@ -17,12 +17,11 @@ spec:
             cpu: "15"
             memory: "24Gi"
             ephemeral-storage: "250Gi"
-            nvidia.com/rtxa6000: "1"
           limits:
             cpu: "15"
             memory: "24Gi"
             ephemeral-storage: "250Gi"
-            nvidia.com/rtxa6000: "1"
+            nvidia.com/rtxa5000: "1"
 
         command: ["/usr/bin/time", "-v", "python", "sorter.py"]
         args:
@@ -52,9 +51,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/hostname
+              - key: nvidia.com/gpu.product
                 operator: In
                 values:
+                - NVIDIA-RTX-A5000
 
 
       restartPolicy: Never
