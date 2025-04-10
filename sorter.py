@@ -15,7 +15,7 @@ import argparse
 import gc
 import shutil
 import numpy as np
-import braingeneers.utils.s3wrangler as wr
+from utils import s3wrangler as wr
 from core.spikedetector.model import ModelSpikeSorter
 from core.spikesorter.rt_sort import detect_sequences
 

@@ -1,20 +1,35 @@
 name: rt-sort-minimal
 channels:
+  - pytorch
   - conda-forge
   - defaults
 dependencies:
   - python=3.8
   - pip
+  - gxx_linux-64=12.2.0 # ensure a newer compiler is used
+  - libstdcxx-ng=12.2.0
+
+  - pytorch==1.12.1
+  - torchvision==0.13.1
+  - torchaudio==0.12.1
+  - cudatoolkit=11.3
+
   - h5py==3.7.0
   - numpy==1.21.6
   - matplotlib==3.5.3
   - scipy==1.7.3
   - scikit-learn==1.0.2
-  - pytorch==1.12.1  
+
+  
+
   - pip:
+    - awswrangler==3.5.1
+    - boto3==1.35.95
+    - botocore==1.35.99
     - diptest==0.6.0
     - tqdm==4.65.0
     - spikeinterface==0.94.0
+    - smart-open==7.1.0
     - jupyter==1.0.0
     - comet-ml==3.36.0
-    - boto3==1.35.95
+    - tenacity==9.0.0
