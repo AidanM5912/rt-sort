@@ -5,7 +5,6 @@ FROM nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Disable Intel JIT profiling (avoids iJIT_NotifyEvent crash)
-
 ENV IJIT_DISABLE=1
 
 # Install system packages and the NVIDIA package repository for TensorRT
@@ -39,6 +38,10 @@ RUN conda env create -f /tmp/mini.yaml && conda clean -a
 
 RUN conda run -n rt-sort-minimal pip install --upgrade pip==23.3.1 && \
     conda run -n rt-sort-minimal pip install torch-tensorrt==1.2.0 --find-links https://github.com/pytorch/TensorRT/releases/expanded_assets/v1.2.0
+
+#numpy is being upgraded to 1.24.4 which is not what we want, fix
+RUN conda run -n rt-sort-minimal pip uninstall -y numpy && \
+    conda run -n rt-sort-minimal pip install numpy==1.22.4
 
 
 # Set required environment variables for S3 endpoints if needed.

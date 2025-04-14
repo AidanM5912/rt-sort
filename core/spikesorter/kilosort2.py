@@ -45,7 +45,7 @@ from math import ceil
 import traceback
 import h5py
 
-from braindance.core.spikesorter.rt_sort import save_traces
+from core.spikesorter.rt_sort import save_traces
 
 # print(f"Done. Time: {time.time() - _import_start:.2f}s")
 

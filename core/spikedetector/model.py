@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import json
 import time
-
-from braindance.core.spikedetector import utils, plot
+from . import data
+from core.spikedetector import utils, plot
 
 
 class ModelSpikeSorter(nn.Module):
@@ -1103,13 +1103,13 @@ class ModelSpikeSorter(nn.Module):
 
     @staticmethod
     def load_mea():
-        import braindance
-        return ModelSpikeSorter.load(Path(braindance.__path__[0]) / "core/spikedetector/detection_models/mea")
+        from pathlib import Path
+        return ModelSpikeSorter.load(Path(__file__).parent / "detection_models" / "mea")
     
     @staticmethod
     def load_neuropixels():
-        import braindance
-        return ModelSpikeSorter.load(Path(braindance.__path__[0]) / "core/spikedetector/detection_models/neuropixels")
+        from pathlib import Path
+        return ModelSpikeSorter.load(Path(__file__).parent / "detection_models" / "neuropixels")
 
 
 class ModelTuning(nn.Module):

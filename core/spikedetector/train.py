@@ -5,8 +5,8 @@ from spikeinterface.extractors import BaseRecording
 import torch
 from torch.utils.data import DataLoader
 
-from braindance.core.spikedetector import data, utils
-from braindance.core.spikedetector.model import ModelSpikeSorter
+from core.spikedetector import data, utils
+from core.spikedetector.model import ModelSpikeSorter
 
 def train_detection_model(recordings: list,
                           dl_folder_name="dl_folder",

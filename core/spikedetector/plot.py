@@ -6,7 +6,7 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import PercentFormatter
 from matplotlib.axes._axes import Axes
 
-from braindance.core.spikedetector import utils
+from core.spikedetector import utils
 
 TRACE_X_LABEL = "Time (ms)"
 
@@ -110,7 +110,9 @@ def set_ticks(subplots: Tuple[Axes], trace: np.array, increment=10,
     :param center_xticks
         Whether to set center of xticks to 0 (left is negative time and right is positive)
     """
-    # samp_freq_khz=30  # Set this based on recording 
+
+    ###this was set to 30?? but i changed it to 3 just because.
+    samp_freq_khz=3  # Set this based on recording 
     
     yticks, ylim = get_yticks_lim(trace, 0, increment, buffer_min, buffer_max)
 

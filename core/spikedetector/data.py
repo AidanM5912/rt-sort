@@ -10,9 +10,9 @@ import json
 import torch
 from torch.utils.data import Dataset, DataLoader, ConcatDataset
 
-from braindance.core.spikedetector import plot 
-from braindance.core.spikesorter.kilosort2 import run_kilosort2
-from braindance.core.spikesorter.rt_sort import save_traces
+from core.spikedetector import plot 
+#from core.spikesorter.kilosort2 import run_kilosort2
+#from core.spikesorter.rt_sort import save_traces
 
 
 class Recording:
@@ -1060,16 +1060,29 @@ class BandpassFilter:
             filtered = signal.filtfilt(b, a, trace, axis=-1)
         return filtered
 
+##########################################
+##################################################################################
+#######################################
+##############################################
+########################################
 
+#FOR FUTURE ME THIS IS JUST FOR GETTING IT TO RUN, I NEED TO FIX THE CIRCULAR IMPORTS. RT_sort->model->data->kilosort2->rtsort
+# #killing it at kilosort2 since that isnt needed
+
+"""
 def setup_dl_folders(recording_files, dl_folders,
                      **run_kilsort2_kwargs):
     """
-    Set up recordings and necessary files and folders to train DL model    
-    """
+    #Set up recordings and necessary files and folders to train DL model    
+"""
     
     # Save curated kilosort2 results in sorted.npz
     inter_folders = [Path(folder) / "inter" for folder in dl_folders]
     run_kilsort2_kwargs['save_dl_data'] = True
+
+
+    #FOR FUTURE ME THIS IS JUST FOR GETTING IT TO RUN, I NEED TO FIX THE CIRCULAR IMPORTS. RT_sort->model->data->kilosort2->rtsort
+    #killing it at kilosort2 since that isnt needed
     run_kilosort2(recording_files, inter_folders, dl_folders, **run_kilsort2_kwargs)
     
     # Save scaled traces 
@@ -1079,15 +1092,19 @@ def setup_dl_folders(recording_files, dl_folders,
         save_traces(rec_path, inter_folder)
 
     return dl_folders
+"""
+
+"""
+    def is_dl_folder(folder):
+        # Check if folder has necessary files for training and testing DL model
+        folder = Path(folder)
+        return folder.is_dir() and (folder / "sorted.npz").exists() and (folder / "scaled_traces.npy").exists()
+    """
 
 
-def is_dl_folder(folder):
-    # Check if folder has necessary files for training and testing DL model
-    folder = Path(folder)
-    return folder.is_dir() and (folder / "sorted.npz").exists() and (folder / "scaled_traces.npy").exists()
-
-
+#drop setup_dl_folders for circular import nonsense
 def main():
+    """
     setup_dl_folders(
         recording_files=[
             "/data/MEAprojects/organoid/intrinsic/200123/2954/network/data.raw.h5"
@@ -1097,7 +1114,7 @@ def main():
         ],
         kilosort_path="/home/mea/SpikeSorting/kilosort/Kilosort2"
         )
-    
+    """
     multirec = MultiRecordingDataset(["/data/MEAprojects/organoid/intrinsic/200123/2954/network"])
     print(len(multirec))
     print(multirec[0])

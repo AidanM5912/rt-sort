@@ -21,7 +21,7 @@ from spikeinterface.extractors import MaxwellRecordingExtractor, NwbRecordingExt
 from threadpoolctl import threadpool_limits 
 from tqdm import tqdm
 
-from braindance.core.spikedetector.model import ModelSpikeSorter
+from core.spikedetector.model import ModelSpikeSorter
 # from spikedata import SpikeData
 
 neuropixels_params={
@@ -1103,22 +1103,22 @@ class RTSort:
 
     def get_units(self):
         raise NotImplementedError
-        from braindance.analysis.select_units import Unit
-        return [Unit(root_elec, spike_train, idx) for idx, (spike_train, root_elec) in 
-                enumerate(zip(self.seq_spike_trains, self.get_seq_root_elecs()))]
-
-    def to_spikedata(self, all_seq_detections=None):
+        #from braindance.analysis.select_units import Unit
+        #return [Unit(root_elec, spike_train, idx) for idx, (spike_train, root_elec) in 
+                #enumerate(zip(self.seq_spike_trains, self.get_seq_root_elecs()))]
+    
+    #def to_spikedata(self, all_seq_detections=None):
         """
         Params
             all_seq_detections
                 If None, use self.seq_spike_trains (sequences' spikes after second merging but before final spike reassignment) to create SpikeData object
                 If not None, should be the return value of method self.sort_offline 
-        """
         
         if all_seq_detections is None:
             all_seq_detections = self.seq_spike_trains
             
         return SpikeData(all_seq_detections, N=self.num_seqs)
+        """
 
     @staticmethod
     def load_from_file(pickle_path, model=None):
@@ -1150,7 +1150,7 @@ def rt_sort_maxwell_env_process(process_ready, obs_ready, stim_ready, env_done,
     """
     import multiprocessing
     from multiprocessing import shared_memory
-    from braindance.core.maxwell_env import Config
+    from core.maxwell_env import Config
     
     obs_chans=1027
     shm_dtype=np.float32

@@ -19,7 +19,7 @@ try:
 except ImportError:
     print("No maxlab found, instead using dummy maxlab module!")
     
-    import braindance.core.dummy_maxlab as maxlab
+    import core.dummy_maxlab as maxlab
     
 
 # stop_process_using_port(7204) to stop dummy raw data if not stopped automatically (useful for Jupyter notebooks)
@@ -30,7 +30,7 @@ import psutil
 from collections import namedtuple
 from csv import writer
 
-from braindance.core.base_env import BaseEnv
+from core.base_env import BaseEnv
 
 # SpikeEvent is a named tuple that represents a single spike event
 SpikeEvent = namedtuple('SpikeEvent', 'frame channel amplitude')
@@ -1171,11 +1171,11 @@ def launch_dummy_server(dummy):
     print("Using dummy data: \n\t", dummy)
     print("====================================")
     # run dummy_zmq_np.py in a separate process
-    import braindance.core.dummy_zmq_np
+    import core.dummy_zmq_np
     import atexit
-    # dummy_process = Process(target=braindance.core.dummy_zmq_np.run)
+    # dummy_process = Process(target=core.dummy_zmq_np.run)
     # Add dummy process with the parmeter which is a string
-    dummy_process = Process(target=braindance.core.dummy_zmq_np.run, args=(dummy,))
+    dummy_process = Process(target=core.dummy_zmq_np.run, args=(dummy,))
     dummy_process.start()
     atexit.register(dummy_process.terminate)
 

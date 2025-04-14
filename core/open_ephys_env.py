@@ -5,7 +5,7 @@ import numpy as np
 from open_ephys.control import OpenEphysHTTPServer
 import zmq
 
-from braindance.core.base_env import BaseEnv
+from core.base_env import BaseEnv
 
 
 class OpenEphysEnv(BaseEnv):

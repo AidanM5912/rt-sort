@@ -3,7 +3,7 @@ try:
 except:
     # print("Could not import maxlab")
     # print("Please make sure you are running this on a maxwell computer")
-    import braindance.core.dummy_maxlab as maxlab
+    import core.dummy_maxlab as maxlab
 import argparse
 import json
 

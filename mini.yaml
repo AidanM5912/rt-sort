@@ -1,6 +1,6 @@
 name: rt-sort-minimal
 channels:
-  - pytorch
+  #- pytorch
   - conda-forge
   - defaults
 dependencies:
@@ -9,27 +9,40 @@ dependencies:
   - gxx_linux-64=12.2.0 # ensure a newer compiler is used
   - libstdcxx-ng=12.2.0
 
-  - pytorch==1.12.1
-  - torchvision==0.13.1
-  - torchaudio==0.12.1
-  - cudatoolkit=11.3
+  #- pytorch==1.12.1
+  #- torchvision==0.13.1
+  #- torchaudio==0.12.1
+  #- cudatoolkit=11.3
 
-  - h5py==3.7.0
-  - numpy==1.21.6
-  - matplotlib==3.5.3
-  - scipy==1.7.3
-  - scikit-learn==1.0.2
-
+  - h5py=3.7.0
+  #- numpy=1.21.6
+  - numpy=1.22.4
+  - matplotlib=3.5.3
+  - scipy=1.7.3
+  - scikit-learn=1.0.2
+  - pyzmq=26.0.0
+  - joblib=1.4.2 #for kilosort
   
 
   - pip:
+    #- numpy==1.21.6 #this install from conda was being ignored by pip, need to pin it here to avoid scipy and numpy version conflicts
+    - numpy==1.22.4
+    - torch==1.12.1+cu113
+    - torchvision==0.13.1+cu113
+    - torchaudio==0.12.1
+    - --extra-index-url https://download.pytorch.org/whl/cu113
+
     - awswrangler==3.5.1
     - boto3==1.35.95
     - botocore==1.35.99
     - diptest==0.6.0
     - tqdm==4.65.0
-    - spikeinterface==0.94.0
+    - spikeinterface==0.95.0
     - smart-open==7.1.0
     - jupyter==1.0.0
     - comet-ml==3.36.0
     - tenacity==9.0.0
+    - numba==0.58.1
+    - pynvml==11.5.3
+    - threadpoolctl==3.5.0
+    - natsort==8.4.0 #for kilosort

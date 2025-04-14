@@ -10,8 +10,8 @@ Phases act as parts of experiments which have a specific purpose, such as
     - custom
         ---where users can build exact logic for stimulation
 '''
-import braindance.core.base_env as base_env
-from braindance.core.artifact_removal import ArtifactRemoval
+import core.base_env as base_env
+from core.artifact_removal import ArtifactRemoval
 
 import numpy as np
 import time
@@ -125,6 +125,14 @@ class PhaseManager:
                         print("Running sub phase:", sub_phase.__class__.__name__)
                         print("="*20)
                         sub_phase.run()
+
+                elif isinstance(phase, Phase):
+                    phase.run()
+
+                self.env.close()
+                self.log_phase(phase)
+
+                """        
                 elif isinstance(phase, AnalysisPhase):
                     # Make sure to close/save any previous phases
                     # phase.run(cur_filename)
@@ -133,14 +141,7 @@ class PhaseManager:
                         self.analysis_dao = phase.run(self.analysis_dao, cur_filename)
                     else:
                         self.analysis_dao = phase.run(self.analysis_dao)
-                elif isinstance(phase, Phase):
-                    phase.run()
-                self.env.close()
-                self.log_phase(phase)
-                
-
-                
-
+                """
         except Exception as e:
             self.env.close()
             raise e

@@ -1,11 +1,11 @@
 import numpy as np
-import braindance
 import argparse
 import json
+from pathlib import Path
 
 if __name__ == "__main__":
     # get path to braindance module
-    bd_path = braindance.__path__[0]
+    bd_path = Path("core")
 
     # Argparse the stim electrodes
     parser = argparse.ArgumentParser()
