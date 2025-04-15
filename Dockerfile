@@ -43,6 +43,9 @@ RUN conda run -n rt-sort-minimal pip install --upgrade pip==23.3.1 && \
 RUN conda run -n rt-sort-minimal pip uninstall -y numpy && \
     conda run -n rt-sort-minimal pip install numpy==1.22.4
 
+# Create the expected HDF5 plugin directory and set the environment variable
+RUN mkdir -p /opt/conda/envs/rt-sort-minimal/lib/hdf5/plugin
+ENV HDF5_PLUGIN_PATH=/opt/conda/envs/rt-sort-minimal/lib/hdf5/plugin
 
 # Set required environment variables for S3 endpoints if needed.
 ENV ENDPOINT_URL="https://s3.braingeneers.gi.ucsc.edu"
@@ -53,6 +56,13 @@ WORKDIR /app
 
 #point to conda env for runtime 
 ENV LD_LIBRARY_PATH=/opt/conda/envs/rt-sort-minimal/lib:$LD_LIBRARY_PATH
+
+# Copy the proprietary HDF5 compression plugin into the container
+COPY libcompression.so /opt/conda/envs/rt-sort-minimal/lib/hdf5/plugin/libcompression.so
+
+# Export the plugin path for HDF5 to find it
+ENV HDF5_PLUGIN_PATH=/opt/conda/envs/rt-sort-minimal/lib/hdf5/plugin
+
 
 # Set the default command. include stdbuf and /usr/bin/time -v for resource tracking.
 #CMD ["stdbuf", "-i0", "-o0", "-e0", "/usr/bin/time", "-v", "python", "sorter.py"] # old one doesnt really matter k8s overwrites with command in job yaml but whatever
