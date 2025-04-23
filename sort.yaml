@@ -14,13 +14,13 @@ spec:
 
           # GPU Run
           requests:
-            cpu: "8"
-            memory: "36Gi"
+            cpu: "10"
+            memory: "45Gi"
             ephemeral-storage: "250Gi"
             nvidia.com/gpu: "1"
           limits:
-            cpu: "8"
-            memory: "36Gi"
+            cpu: "10"
+            memory: "45Gi"
             ephemeral-storage: "250Gi"
             nvidia.com/gpu: "1"
 

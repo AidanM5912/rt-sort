@@ -8,6 +8,7 @@ import pickle
 import shutil
 from time import perf_counter
 import warnings
+import gc #just added
 
 import numpy as np
 import scipy
@@ -1494,6 +1495,11 @@ def run_detection_model(recording,
 
             traces_all[:, start_frame:start_frame + sample_size] = traces_torch.cpu()
             outputs_all[:, start_frame:start_frame + num_output_locs] = outputs[:, 0, :]
+            ####### ADDED HERE
+            # SAFE CLEANUP
+            del traces_torch, outputs
+            torch.cuda.empty_cache()
+            gc.collect()
             
     # Check if there is data remaining at end of recording that was not included in all_start_frames for-loop
     remaining_frames = rec_duration - (start_frame + sample_size)
@@ -1505,6 +1511,10 @@ def run_detection_model(recording,
         traces_all[:, -remaining_frames:] = traces_torch[:, -remaining_frames:].cpu()
         outputs_all[:, -remaining_frames:] = outputs[:, -remaining_frames:]
             
+        # SAFE CLEANUP
+        del traces_torch, outputs
+        torch.cuda.empty_cache()
+
     # endregion
 
     # region Save traces and outputs
