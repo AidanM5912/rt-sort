@@ -4,8 +4,12 @@ from torch import nn
 try: 
     import torch_tensorrt
     TENSORRT = True
-except ModuleNotFoundError:
+except Exception as e:
+    print("Failed to import torch_tensorrt:", e)
     TENSORRT = False
+#old code, this si for debugging
+#except ModuleNotFoundError:
+#    TENSORRT = False
     # print("Cannot import torch_tensorrt")
 
 import numpy as np

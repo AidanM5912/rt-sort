@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: rtsort
-        image: aidanmorson/rt-sort:v1
+        image: aidanmorson/rt-sort:v2.1
         imagePullPolicy: Always
         resources:
 

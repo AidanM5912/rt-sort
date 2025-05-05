@@ -1487,11 +1487,40 @@ def run_detection_model(recording,
 
     # region Run model
     print("Running model ...")
+
+    ###for debugging
+    ####added some print statments and split the inference and cpu copy into two steps
+    with torch.no_grad():
+        for start_frame in tqdm(all_start_frames):
+            traces_torch = torch.tensor(scaled_traces[:, start_frame:start_frame+sample_size], device=device, dtype=torch.float16)
+            traces_torch -= torch.median(traces_torch, dim=1, keepdim=True).values
+
+            print(f"Start frame {start_frame}: running model")
+            outputs = model_compiled(traces_torch[:, None, :] * input_scale * inference_scaling)
+
+            print("Model run complete, moving to CPU")
+            outputs = outputs.cpu()
+
+            print("Assigning to outputs_all")
+            outputs_all[:, start_frame:start_frame + num_output_locs] = outputs[:, 0, :]
+
+            print("Assigning to traces_all")
+            traces_all[:, start_frame:start_frame + sample_size] = traces_torch.cpu()
+
+            print("Cleaning up")
+            del traces_torch, outputs
+            torch.cuda.empty_cache()
+            gc.collect()
+
+    ###BELOW THIS IS OLD, USING ABOVE FOR DEBUGGING
+    #################################
+    """
     with torch.no_grad():
         for start_frame in tqdm(all_start_frames):
             traces_torch = torch.tensor(scaled_traces[:, start_frame:start_frame+sample_size], device=device, dtype=torch.float16)
             traces_torch -= torch.median(traces_torch, dim=1, keepdim=True).values
             outputs = model_compiled(traces_torch[:, None, :] * input_scale * inference_scaling).cpu()
+ 
 
             traces_all[:, start_frame:start_frame + sample_size] = traces_torch.cpu()
             outputs_all[:, start_frame:start_frame + num_output_locs] = outputs[:, 0, :]
@@ -1500,6 +1529,7 @@ def run_detection_model(recording,
             del traces_torch, outputs
             torch.cuda.empty_cache()
             gc.collect()
+    """
             
     # Check if there is data remaining at end of recording that was not included in all_start_frames for-loop
     remaining_frames = rec_duration - (start_frame + sample_size)
@@ -1514,6 +1544,7 @@ def run_detection_model(recording,
         # SAFE CLEANUP
         del traces_torch, outputs
         torch.cuda.empty_cache()
+        gc.collect()
 
     # endregion
 
